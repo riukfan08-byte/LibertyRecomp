@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Checkout
+      - name: Checkout LibertyRecomp experimental
         uses: actions/checkout@v5
         with:
           repository: OZORDI/LibertyRecomp
           ref: experimental
-          submodules: recursive
+          submodules: false
           fetch-depth: 0
 
       - name: Setup Java 17
@@ -31,21 +31,23 @@ jobs:
             "build-tools;34.0.0" \
             "ndk;25.2.9519653"
 
-      - name: Configure Android build
+      - name: Check Android project
         run: |
-          cmake --version
-          cmake . --preset android-release
+          echo "Checking Android project..."
+          ls -la
+          echo "Android directory:"
+          ls -la android
+          echo "Gradle wrapper:"
+          ls -la android/gradlew
 
-      - name: Build LibertyRecomp
+      - name: Build APK
+        working-directory: android
         run: |
-          cmake --build ./out/build/android-release --target LibertyRecomp --parallel 2
-
-      - name: Find APK
-        run: |
-          find . -type f -name "*.apk" -print
+          chmod +x gradlew
+          ./gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: LibertyRecomp-Android
-          path: "**/*.apk"
+          path: android/app/build/outputs/apk/release/app-release.apk
