@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build LibertyRecomp Android
 
 on:
   workflow_dispatch:
@@ -25,16 +25,25 @@ jobs:
 
       - name: Install Android SDK and NDK
         run: |
-          sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653"
+          sdkmanager "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "ndk;25.2.9519653"
 
-      - name: Build Android APK
-        working-directory: android
+      - name: Configure Android build
         run: |
-          chmod +x gradlew
-          ./gradlew assembleRelease
+          cmake --version
+          cmake . --preset android-release
+
+      - name: Build LibertyRecomp
+        run: |
+          cmake --build ./out/build/android-release --target LibertyRecomp --parallel 2
+
+      - name: Find APK
+        run: |
+          find . -type f -name "*.apk" -print
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: LibertyRecomp-Android
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: "**/*.apk"
