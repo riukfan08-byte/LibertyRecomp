@@ -16,6 +16,17 @@ jobs:
           submodules: false
           fetch-depth: 0
 
+      - name: Initialize main submodules
+        run: |
+          git submodule sync
+          git submodule update --init --force
+
+      - name: Initialize RexGlue submodules
+        working-directory: glue/rexglue-sdk-main
+        run: |
+          git submodule sync
+          git submodule update --init --recursive --force
+
       - name: Setup Java 17
         uses: actions/setup-java@v5
         with:
@@ -31,23 +42,18 @@ jobs:
             "build-tools;34.0.0" \
             "ndk;25.2.9519653"
 
-      - name: Check Android project
+      - name: Configure Android
         run: |
-          echo "Checking Android project..."
-          ls -la
-          echo "Android directory:"
-          ls -la android
-          echo "Gradle wrapper:"
-          ls -la android/gradlew
+          cmake --preset android-release
 
-      - name: Build APK
-        working-directory: android
+      - name: Build Android
         run: |
-          chmod +x gradlew
-          ./gradlew assembleRelease
+          cmake --build out/build/android-release --parallel 2
 
-      - name: Upload APK
+      - name: Upload Android build
         uses: actions/upload-artifact@v4
         with:
           name: LibertyRecomp-Android
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: |
+            out/build/android-release/**/*.apk
+            out/build/android-release/**/*.so
