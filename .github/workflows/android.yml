@@ -19,9 +19,29 @@ jobs:
       - name: Initialize main submodules
         run: |
           git submodule sync
-          git submodule update --init --force
+          git submodule update --init --force --depth 1 \
+            thirdparty/GameNetworkingSockets \
+            thirdparty/MoltenVK/MoltenVK \
+            thirdparty/MoltenVK/SPIRV-Cross \
+            thirdparty/SDL \
+            thirdparty/SDL_mixer \
+            thirdparty/concurrentqueue \
+            thirdparty/ddspp \
+            thirdparty/ffmpeg-core \
+            thirdparty/imgui \
+            thirdparty/implot \
+            thirdparty/json \
+            thirdparty/magic_enum \
+            thirdparty/msdf-atlas-gen \
+            thirdparty/nativefiledialog-extended \
+            thirdparty/plume \
+            thirdparty/stb \
+            thirdparty/unordered_dense \
+            thirdparty/vcpkg \
+            tools/XenonRecomp \
+            tools/XenosRecomp
 
-      - name: Initialize RexGlue submodules
+      - name: Initialize RexGlue
         working-directory: glue/rexglue-sdk-main
         run: |
           git submodule sync
