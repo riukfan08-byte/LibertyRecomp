@@ -139,6 +139,10 @@ jobs:
         run: |
           grep -n -B 3 -A 3 "USE_CRYPTO" thirdparty/GameNetworkingSockets/CMakeLists.txt | head -40
       
+      - name: Configure Android crypto
+        run: |
+          grep -R "libsodium" -n thirdparty/GameNetworkingSockets/CMakeLists.txt thirdparty/GameNetworkingSockets/cmake 2>/dev/null | head -30
+      
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
