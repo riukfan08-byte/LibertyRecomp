@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Checkout LibertyRecomp experimental
+      - name: Checkout LibertyRecomp main
         uses: actions/checkout@v5
         with:
           repository: OZORDI/LibertyRecomp
-          ref: experimental
+          ref: main
           submodules: false
           fetch-depth: 0
 
@@ -41,6 +41,13 @@ jobs:
             tools/XenonRecomp \
             tools/XenosRecomp
 
+      - name: Initialize RexGlue
+        run: |
+          rm -rf glue/rexglue-sdk-main
+          git clone --depth 1 \
+            https://github.com/sonicnext-dev/rexglue-sdk-main.git \
+            glue/rexglue-sdk-main
+
       - name: Prepare RexGlue dependencies
         working-directory: glue/rexglue-sdk-main
         run: |
@@ -53,14 +60,37 @@ jobs:
           rm -rf thirdparty/simde
           rm -rf thirdparty/xxHash
 
-          git clone --depth 1 https://github.com/kyz/libmspack.git thirdparty/libmspack
-          git clone --depth 1 https://github.com/microsoft/DirectXShaderCompiler.git thirdparty/DirectXShaderCompiler
-          git clone --depth 1 https://github.com/KhronosGroup/glslang.git thirdparty/glslang
-          git clone --depth 1 https://github.com/xenia-project/FFmpeg.git thirdparty/FFmpeg
-          git clone --depth 1 --branch lts_2024_07_22 https://github.com/abseil/abseil-cpp.git thirdparty/abseil-cpp
-          git clone --depth 1 https://github.com/marzer/tomlplusplus.git thirdparty/tomlplusplus
-          git clone --depth 1 https://github.com/simd-everywhere/simde.git thirdparty/simde
-          git clone --depth 1 https://github.com/Cyan4973/xxHash.git thirdparty/xxHash
+          git clone --depth 1 \
+            https://github.com/kyz/libmspack.git \
+            thirdparty/libmspack
+
+          git clone --depth 1 \
+            https://github.com/microsoft/DirectXShaderCompiler.git \
+            thirdparty/DirectXShaderCompiler
+
+          git clone --depth 1 \
+            https://github.com/KhronosGroup/glslang.git \
+            thirdparty/glslang
+
+          git clone --depth 1 \
+            https://github.com/xenia-project/FFmpeg.git \
+            thirdparty/FFmpeg
+
+          git clone --depth 1 --branch lts_2024_07_22 \
+            https://github.com/abseil/abseil-cpp.git \
+            thirdparty/abseil-cpp
+
+          git clone --depth 1 \
+            https://github.com/marzer/tomlplusplus.git \
+            thirdparty/tomlplusplus
+
+          git clone --depth 1 \
+            https://github.com/simd-everywhere/simde.git \
+            thirdparty/simde
+
+          git clone --depth 1 \
+            https://github.com/Cyan4973/xxHash.git \
+            thirdparty/xxHash
 
       - name: Setup Java 17
         uses: actions/setup-java@v5
@@ -77,12 +107,24 @@ jobs:
             "build-tools;34.0.0" \
             "ndk;25.2.9519653"
 
+      - name: Check Android support
+        run: |
+          echo "Checking Android files..."
+          test -f CMakePresets.json
+          test -f toolchains/android.cmake
+          test -d tools/local_game_payload
+          echo "Android files found."
+
       - name: Check game payload
         run: |
           echo "Contenido de tools/local_game_payload:"
           ls -lah tools/local_game_payload
-          echo "Comprobando default.xex:"
-          ls -lah tools/local_game_payload/default.xex
+
+          if [ ! -f tools/local_game_payload/default.xex ]; then
+            echo "ERROR: default.xex no está presente."
+            echo "Debes proporcionar el payload antes de compilar."
+            exit 1
+          fi
 
       - name: Configure Android
         env:
@@ -96,7 +138,7 @@ jobs:
 
       - name: Find Android output
         run: |
-          echo "Searching for APK and shared libraries..."
+          echo "Searching for Android output..."
           find . -type f \( -name "*.apk" -o -name "*.so" \) | head -100
 
       - name: Upload Android build
