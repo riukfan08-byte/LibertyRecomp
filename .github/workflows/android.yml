@@ -163,10 +163,17 @@ jobs:
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
-          VCPKG_TARGET_TRIPLET: arm64-android
+          ANDROID_NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/26.1.10909125
         run: |
-          cmake --preset android-release \
-            -DVCPKG_TARGET_TRIPLET=arm64-android
+          cmake -B out/build/android-release \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_TOOLCHAIN_FILE=toolchains/android.cmake \
+            -DANDROID_ABI=arm64-v8a \
+            -DANDROID_PLATFORM=android-26 \
+            -DLIBERTY_RECOMP_TARGET_PLATFORM=android \
+            -DLIBERTY_RECOMP_EMBEDDED_GAME_PATH=tools/local_game_payload \
+            -DVCPKG_ROOT="$VCPKG_ROOT"
 
       - name: Build Android
         run: |
