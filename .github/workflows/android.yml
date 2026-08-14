@@ -40,9 +40,9 @@ jobs:
           ls -lh tools/local_game_payload/
 
       - name: Initialize all submodules
- run: |
-    git submodule sync --recursive
-    git submodule update --init --recursive --force
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --force
 
       - name: Prepare RexGlue dependencies
         working-directory: glue/rexglue-sdk-main
@@ -65,6 +65,11 @@ jobs:
           git clone --depth 1 https://github.com/simd-everywhere/simde.git thirdparty/simde
           git clone --depth 1 https://github.com/Cyan4973/xxHash.git thirdparty/xxHash
 
+      - name: Initialize RexGlue submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --force glue/rexglue-sdk-main
+      
       - name: Setup Java 17
         uses: actions/setup-java@v5
         with:
