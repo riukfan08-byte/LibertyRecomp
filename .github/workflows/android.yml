@@ -126,6 +126,11 @@ jobs:
         run: |
           sed -i 's|add_subdirectory("${LIBERTY_RECOMP_THIRDPARTY_ROOT}/nativefiledialog-extended")|if(NOT ANDROID)\nadd_subdirectory("${LIBERTY_RECOMP_THIRDPARTY_ROOT}/nativefiledialog-extended")\nendif()|' thirdparty/CMakeLists.txt
       
+      - name: Install OpenSSL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libssl-dev 
+      
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
