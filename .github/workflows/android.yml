@@ -122,6 +122,10 @@ jobs:
             --include="*.cmake" \
             . | head -50 || true
        
+      - name: Disable nativefiledialog on Android
+        run: |
+          sed -i 's|add_subdirectory("${LIBERTY_RECOMP_THIRDPARTY_ROOT}/nativefiledialog-extended")|if(NOT ANDROID)\nadd_subdirectory("${LIBERTY_RECOMP_THIRDPARTY_ROOT}/nativefiledialog-extended")\nendif()|' thirdparty/CMakeLists.txt
+      
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
