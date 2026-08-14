@@ -152,11 +152,20 @@ jobs:
             thirdparty/GameNetworkingSockets \
             2>/dev/null | head -80
       
+      - name: Install Android OpenSSL
+        env:
+          VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
+          ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
+        run: |
+          $VCPKG_ROOT/vcpkg install openssl:arm64-android
+      
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
+          VCPKG_TARGET_TRIPLET: arm64-android
         run: |
-          cmake --preset android-release
+          cmake --preset android-release \
+            -DVCPKG_TARGET_TRIPLET=arm64-android
 
       - name: Build Android
         run: |
