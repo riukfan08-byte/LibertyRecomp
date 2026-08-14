@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: OZORDI/LibertyRecomp
-          ref: experimental
+          ref: main
           submodules: false
           fetch-depth: 0
           
@@ -98,7 +98,7 @@ jobs:
         run: |
           sdkmanager "platforms;android-34" \
             "build-tools;34.0.0" \
-            "ndk;25.2.9519653"
+            "ndk;26.1.10909125"
 
       - name: Check game payload
         run: |
