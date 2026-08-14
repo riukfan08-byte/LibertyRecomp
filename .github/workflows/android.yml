@@ -40,7 +40,7 @@ jobs:
           ls -lh tools/local_game_payload/
 
       - name: Initialize all submodules
-run: |
+ run: |
     git submodule sync --recursive
     git submodule update --init --recursive --force
 
