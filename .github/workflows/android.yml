@@ -78,6 +78,8 @@ jobs:
             "ndk;25.2.9519653"
 
       - name: Configure Android
+        env:
+          VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
         run: |
           cmake --preset android-release
 
