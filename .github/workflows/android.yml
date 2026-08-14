@@ -60,9 +60,7 @@ jobs:
             thirdparty/plume \
             thirdparty/stb \
             thirdparty/unordered_dense \
-            thirdparty/vcpkg \
-            tools/XenonRecomp \
-            tools/XenosRecomp
+            thirdparty/vcpkg
 
       - name: Prepare RexGlue dependencies
         working-directory: glue/rexglue-sdk-main
