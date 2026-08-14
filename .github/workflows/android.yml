@@ -155,9 +155,10 @@ jobs:
       - name: Install Android OpenSSL
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
-          ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
         run: |
-          $VCPKG_ROOT/vcpkg install openssl:arm64-android
+          cd "$VCPKG_ROOT"
+          ./bootstrap-vcpkg.sh -disableMetrics
+          ./vcpkg install openssl:arm64-android
       
       - name: Configure Android
         env:
