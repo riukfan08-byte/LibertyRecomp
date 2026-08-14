@@ -114,15 +114,14 @@ jobs:
           echo "Android configuration:"
           grep -R "ANDROID" -n thirdparty/nativefiledialog-extended/CMakeLists.txt thirdparty/nativefiledialog-extended/src/CMakeLists.txt | head -50 || true
       
-            - name: Locate nativefiledialog
+      - name: Locate nativefiledialog
         run: |
           echo "Referencias a nativefiledialog:"
           grep -R "nativefiledialog" -n \
             --include="CMakeLists.txt" \
             --include="*.cmake" \
-            . | head -50
+            . | head -50 || true
        
-        
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
