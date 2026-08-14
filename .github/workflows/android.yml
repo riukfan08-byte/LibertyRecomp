@@ -84,13 +84,6 @@ jobs:
           echo "Comprobando default.xex:"
           ls -lah tools/local_game_payload/default.xex
 
-              - name: Download game payload
-        run: |
-          mkdir -p tools/local_game_payload
-          curl -L \
-            https://raw.githubusercontent.com/riukfan08-byte/LibertyRecomp/main/tools/local_game_payload/default.xex \
-            -o tools/local_game_payload/default.xex
-          ls -lh tools/local_game_payload/default.xex
 
       - name: Configure Android
         env:
