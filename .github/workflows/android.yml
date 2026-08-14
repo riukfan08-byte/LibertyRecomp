@@ -41,17 +41,26 @@ jobs:
             tools/XenonRecomp \
             tools/XenosRecomp
 
-      - name: Fix RexGlue submodule configuration
-        run: |
-          cd glue/rexglue-sdk-main
-          git config -f .gitmodules --get-regexp '^submodule\..*\.path$' || true
-          git config -f .gitmodules --get-regexp '^submodule\..*\.url$' || true
-          git submodule sync --recursive
-
-      - name: Initialize RexGlue dependencies
+      - name: Prepare RexGlue dependencies
         working-directory: glue/rexglue-sdk-main
         run: |
-          git submodule update --init --recursive --force
+          rm -rf thirdparty/FFmpeg
+          rm -rf thirdparty/abseil-cpp
+          rm -rf thirdparty/libmspack
+          rm -rf thirdparty/DirectXShaderCompiler
+          rm -rf thirdparty/glslang
+          rm -rf thirdparty/tomlplusplus
+          rm -rf thirdparty/simde
+          rm -rf thirdparty/xxHash
+
+          git clone --depth 1 https://github.com/kyz/libmspack.git thirdparty/libmspack
+          git clone --depth 1 https://github.com/microsoft/DirectXShaderCompiler.git thirdparty/DirectXShaderCompiler
+          git clone --depth 1 https://github.com/KhronosGroup/glslang.git thirdparty/glslang
+          git clone --depth 1 https://github.com/xenia-project/FFmpeg.git thirdparty/FFmpeg
+          git clone --depth 1 --branch lts_2024_07_22 https://github.com/abseil/abseil-cpp.git thirdparty/abseil-cpp
+          git clone --depth 1 https://github.com/marzer/tomlplusplus.git thirdparty/tomlplusplus
+          git clone --depth 1 https://github.com/simd-everywhere/simde.git thirdparty/simde
+          git clone --depth 1 https://github.com/Cyan4973/xxHash.git thirdparty/xxHash
 
       - name: Setup Java 17
         uses: actions/setup-java@v5
@@ -76,6 +85,11 @@ jobs:
         run: |
           cmake --build out/build/android-release --parallel 2
 
+      - name: Find Android output
+        run: |
+          echo "Searching for APK and shared libraries..."
+          find . -type f \( -name "*.apk" -o -name "*.so" \) | head -100
+
       - name: Upload Android build
         uses: actions/upload-artifact@v4
         with:
@@ -83,3 +97,4 @@ jobs:
           path: |
             out/build/android-release/**/*.apk
             out/build/android-release/**/*.so
+          if-no-files-found: warn
