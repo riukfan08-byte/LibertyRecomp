@@ -135,6 +135,10 @@ jobs:
         run: |
           sed -n '85,125p' thirdparty/GameNetworkingSockets/CMakeLists.txt
       
+      - name: Check GameNetworkingSockets crypto
+        run: |
+          grep -n -B 3 -A 3 "USE_CRYPTO" thirdparty/GameNetworkingSockets/CMakeLists.txt | head -40
+      
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
