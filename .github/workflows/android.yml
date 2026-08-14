@@ -143,6 +143,15 @@ jobs:
         run: |
           grep -R "libsodium" -n thirdparty/GameNetworkingSockets/CMakeLists.txt thirdparty/GameNetworkingSockets/cmake 2>/dev/null | head -30
       
+      - name: Check Android OpenSSL support
+        run: |
+          echo "=== OpenSSL references ==="
+          grep -R -i "openssl" -n \
+            CMakeLists.txt \
+            toolchains \
+            thirdparty/GameNetworkingSockets \
+            2>/dev/null | head -80
+      
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
