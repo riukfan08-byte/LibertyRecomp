@@ -41,9 +41,32 @@ jobs:
 
       - name: Initialize all submodules
         run: |
-         git submodule sync --recursive
-         git submodule update --init --recursive --force -- \
-         ':!tools/DLSS'
+               git submodule sync --recursive
+
+               git submodule update --init --force \
+               glue/rexglue-sdk-main \
+               thirdparty/GameNetworkingSockets \
+               thirdparty/MoltenVK/MoltenVK \
+               thirdparty/MoltenVK/SPIRV-Cross \
+               thirdparty/SDL \
+               thirdparty/SDL_mixer \
+               thirdparty/concurrentqueue \
+               thirdparty/ddspp \
+               thirdparty/ffmpeg-core \
+               thirdparty/imgui \
+               thirdparty/implot \
+               thirdparty/json \
+               thirdparty/magic_enum \
+               thirdparty/msdf-atlas-gen \
+               thirdparty/nativefiledialog-extended \
+               thirdparty/plume \
+               thirdparty/stb \
+               thirdparty/unordered_dense \
+               thirdparty/vcpkg
+          
+               cd glue/rexglue-sdk-main
+                git submodule sync --recursive
+               git submodule update --init --recursive --force
       
       - name: Prepare RexGlue dependencies
         working-directory: glue/rexglue-sdk-main
