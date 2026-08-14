@@ -153,10 +153,11 @@ jobs:
       - name: Install Android OpenSSL
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
+          VCPKG_DEFAULT_TRIPLET: arm64-android
         run: |
           cd "$VCPKG_ROOT"
           ./bootstrap-vcpkg.sh -disableMetrics
-          ./vcpkg install openssl:arm64-android
+          ./vcpkg install --triplet arm64-android
       
       - name: Configure Android
         env:
