@@ -107,6 +107,13 @@ jobs:
           echo "Comprobando default.xex:"
           ls -lah tools/local_game_payload/default.xex
 
+      - name: Check Android platform configuration
+       run: |
+          echo "Target platform:"
+          grep -R "PLATFORM_LINUX" -n thirdparty/nativefiledialog-extended/CMakeLists.txt thirdparty/nativefiledialog-extended/src/CMakeLists.txt || true
+          echo "Android configuration:"
+          grep -R "ANDROID" -n thirdparty/nativefiledialog-extended/CMakeLists.txt thirdparty/nativefiledialog-extended/src/CMakeLists.txt | head -50 || true
+
 
       - name: Configure Android
         env:
