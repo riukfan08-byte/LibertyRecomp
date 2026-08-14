@@ -77,6 +77,13 @@ jobs:
             "build-tools;34.0.0" \
             "ndk;25.2.9519653"
 
+      - name: Check game payload
+        run: |
+          echo "Contenido de tools/local_game_payload:"
+          ls -lah tools/local_game_payload
+          echo "Comprobando default.xex:"
+          ls -lah tools/local_game_payload/default.xex
+
       - name: Configure Android
         env:
           VCPKG_ROOT: ${{ github.workspace }}/thirdparty/vcpkg
