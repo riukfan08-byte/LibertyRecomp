@@ -41,9 +41,10 @@ jobs:
 
       - name: Initialize all submodules
         run: |
-          git submodule sync --recursive
-          git submodule update --init --recursive --force
-
+         git submodule sync --recursive
+         git submodule update --init --recursive --force -- \
+         ':!tools/DLSS'
+      
       - name: Prepare RexGlue dependencies
         working-directory: glue/rexglue-sdk-main
         run: |
