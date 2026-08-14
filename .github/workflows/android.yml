@@ -19,10 +19,25 @@ jobs:
       - name: Download game payload
         run: |
           mkdir -p tools/local_game_payload
+
           curl -L \
             https://raw.githubusercontent.com/riukfan08-byte/LibertyRecomp/main/tools/local_game_payload/default.xex \
             -o tools/local_game_payload/default.xex
-          ls -lh tools/local_game_payload/default.xex
+
+          curl -L \
+            https://raw.githubusercontent.com/riukfan08-byte/LibertyRecomp/main/tools/local_game_payload/common.rpf \
+            -o tools/local_game_payload/common.rpf
+
+          curl -L \
+            https://raw.githubusercontent.com/riukfan08-byte/LibertyRecomp/main/tools/local_game_payload/xbox360.rpf \
+            -o tools/local_game_payload/xbox360.rpf
+
+          curl -L \
+            https://raw.githubusercontent.com/riukfan08-byte/LibertyRecomp/main/tools/local_game_payload/audio.rpf \
+            -o tools/local_game_payload/audio.rpf
+
+          echo "Payload descargado:"
+          ls -lh tools/local_game_payload/
 
       - name: Initialize main submodules
         run: |
